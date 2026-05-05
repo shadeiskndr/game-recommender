@@ -1,6 +1,6 @@
 import GamePoster from "@/components/GamePoster";
-import db from "@/lib/db";
-import { Game } from "@/lib/types";
+import { fetchAction } from "convex/nextjs";
+import { api } from "@/convex/_generated/api";
 import {
   MagnifyingGlassIcon,
   ArrowPathIcon,
@@ -19,25 +19,15 @@ type SearchTermProps = {
 
 async function SearchTerm({
   params: paramsPromise,
-  searchParams: searchParamsPromise,
 }: SearchTermProps) {
   const params = await paramsPromise;
-  const searchParams = await searchParamsPromise;
   const { term } = params;
   const decodedTerm = decodeURIComponent(term);
 
-  const games = db.collection("games");
-
-  const similarGames = (await games
-    .find(
-      {},
-      {
-        sort: { $vectorize: term },
-        limit: 12,
-        projection: { $vector: 0 },
-      }
-    )
-    .toArray()) as Game[];
+  const similarGames = await fetchAction(api.search.searchByText, {
+    query: decodedTerm,
+    limit: 12,
+  });
 
   return (
     <div className="min-h-screen">
@@ -59,7 +49,7 @@ async function SearchTerm({
               <p className="text-lg text-gray-200 mb-2">
                 AI-powered recommendations for:
               </p>
-              <div className="inline-block px-4 py-2 bg-gradient-to-r from-primary-600/30 to-secondary-600/30 rounded-xl border border-primary-500/30">
+              <div className="inline-block px-4 py-2 bg-linear-to-r from-primary-600/30 to-secondary-600/30 rounded-xl border border-primary-500/30">
                 <span className="text-xl font-semibold text-primary-300">
                   &quot;{decodedTerm}&quot;
                 </span>
@@ -133,7 +123,7 @@ async function SearchTerm({
                 <div className="space-y-4">
                   <a
                     href="/"
-                    className="inline-block px-6 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-xl text-white font-medium hover:from-primary-500 hover:to-secondary-500 transition-all duration-200"
+                    className="inline-block px-6 py-3 bg-linear-to-r from-primary-600 to-secondary-600 rounded-xl text-white font-medium hover:from-primary-500 hover:to-secondary-500 transition-all duration-200"
                   >
                     Browse Featured Games
                   </a>
@@ -155,7 +145,7 @@ async function SearchTerm({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-300">
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-primary-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-primary-400 rounded-full mt-2 shrink-0"></div>
                     <div>
                       <strong className="text-primary-300">
                         Be descriptive:
@@ -167,7 +157,7 @@ async function SearchTerm({
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-secondary-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-secondary-400 rounded-full mt-2 shrink-0"></div>
                     <div>
                       <strong className="text-secondary-300">
                         Use genres:
@@ -181,7 +171,7 @@ async function SearchTerm({
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-accent-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-accent-400 rounded-full mt-2 shrink-0"></div>
                     <div>
                       <strong className="text-accent-400">
                         Describe gameplay:
@@ -193,7 +183,7 @@ async function SearchTerm({
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-primary-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-primary-400 rounded-full mt-2 shrink-0"></div>
                     <div>
                       <strong className="text-primary-300">
                         Set the mood:

@@ -1,14 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "media.rawg.io",
-      },
-      {
-        protocol: "https",
-        hostname: "davidkoepp.com",
       },
     ],
   },

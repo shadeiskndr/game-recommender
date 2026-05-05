@@ -1,33 +1,13 @@
 import GamePoster from "@/components/GamePoster";
-import db from "@/lib/db";
-import { Game } from "@/lib/types";
+import { fetchQuery } from "convex/nextjs";
+import { api } from "@/convex/_generated/api";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 
 // refresh cache every 24 hours
 export const revalidate = 86400;
 
 export default async function Home() {
-  const games = db.collection("games");
-
-  const allGames = (await games
-    .find(
-      {
-        $and: [
-          { genres: { $in: ["Action, Adventure", "Racing"] } },
-          {
-            platforms: {
-              $in: ["PlayStation 5", "PC, PlayStation 5"],
-            },
-          },
-        ],
-      },
-      {
-        limit: 12,
-        // this is how you exclude out the vector fields from the results
-        // projection: { $vector: 0 },
-      }
-    )
-    .toArray()) as Game[];
+  const allGames = await fetchQuery(api.games.featured, { limit: 12 });
 
   return (
     <div className="min-h-screen">
@@ -39,7 +19,7 @@ export default async function Home() {
             <h2 className="text-4xl md:text-5xl font-bold text-gray-300 mb-4">
               Featured Games
             </h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-primary-500 to-secondary-500 mx-auto rounded-full mb-6"></div>
+            <div className="w-20 h-1 bg-linear-to-r from-primary-500 to-secondary-500 mx-auto rounded-full mb-6"></div>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
               Discover video games, handpicked for you
             </p>
@@ -47,7 +27,7 @@ export default async function Home() {
 
           {/* Games Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {allGames.map((game, index) => (
+            {allGames.map((game) => (
               <div key={game._id} className="relative">
                 <GamePoster game={game} />
               </div>
@@ -65,7 +45,7 @@ export default async function Home() {
                 preferences
               </p>
               <div className="flex justify-center">
-                <ScrollToTopButton className="px-6 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-xl text-white font-medium hover:from-primary-700 hover:to-secondary-700 transition-all duration-200 cursor-pointer">
+                <ScrollToTopButton className="px-6 py-3 bg-linear-to-r from-primary-600 to-secondary-600 rounded-xl text-white font-medium hover:from-primary-700 hover:to-secondary-700 transition-all duration-200 cursor-pointer">
                   Try searching above ↑
                 </ScrollToTopButton>
               </div>

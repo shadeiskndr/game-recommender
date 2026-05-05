@@ -1,23 +1,5 @@
-export type Game = {
-  _id: string;
-  id: string;
-  slug: string;
-  name: string;
-  released: string;
-  background_image: string;
-  rating: string;
-  metacritic: string;
-  playtime: string;
-  platforms: string;
-  tags: string;
-  developers: string;
-  publishers: string;
-  genres: string;
-  description: string | null;
-  $vectorize: string;
-  $vector?: Array<number>;
-};
+import type { Doc } from "@/convex/_generated/dataModel";
 
-export type SimilarGame = {
-  $similarity: number;
-} & Game;
+export type Game = Doc<"games">;
+
+export type SimilarGame = Game & { _score: number };

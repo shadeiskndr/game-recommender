@@ -2,8 +2,8 @@ import { GameDescription } from "@/components/GameDescription";
 import GamePoster from "@/components/GamePoster";
 import ImageWithFallback from "@/components/ImageWithFallback";
 import { TagsSection } from "@/components/TagsSection";
-import db from "@/lib/db";
-import { Game, SimilarGame } from "@/lib/types";
+import { fetchQuery, fetchAction } from "convex/nextjs";
+import { api } from "@/convex/_generated/api";
 import {
   CalendarIcon,
   StarIcon,
@@ -20,47 +20,23 @@ export const revalidate = 86400;
 
 type GamePageProps = {
   params: Promise<{
-    id: string;
+    slug: string;
   }>;
 };
 
 async function GamePage({ params: paramsPromise }: GamePageProps) {
-  const buildVectorText = (g: Game): string => {
-    if (g.description) return g.description;
-
-    return [g.name, g.genres, g.tags, g.developers, g.publishers]
-      .filter(Boolean)
-      .join(" ");
-  };
-
   const params = await paramsPromise;
-  const { id } = params;
+  const { slug } = params;
+  const decodedSlug = decodeURIComponent(slug);
 
-  const games = db.collection("games");
+  const [game, similarGames] = await Promise.all([
+    fetchQuery(api.games.bySlug, { slug: decodedSlug }),
+    fetchAction(api.games.similarToSlug, { slug: decodedSlug, limit: 6 }),
+  ]);
 
-  const search = await games.find({ $and: [{ _id: id }] });
-
-  if (!(await search.hasNext())) {
+  if (!game) {
     return notFound();
   }
-
-  const game = (await search.next()) as Game;
-
-  const vectorText = buildVectorText(game);
-
-  const similarGames = (await games
-    .find(
-      {},
-      {
-        sort: { $vectorize: vectorText },
-        limit: 7,
-        includeSimilarity: true,
-      }
-    )
-    .toArray()) as SimilarGame[];
-
-  // Remove the current game from similar games
-  similarGames.shift();
 
   const cleanDescription = game.description
     ? game.description
@@ -313,7 +289,7 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
                         game={similarGame}
                         index={index + 1}
                         similarityRating={Math.round(
-                          (similarGame.$similarity || 0) * 100
+                          (similarGame._score || 0) * 100
                         )}
                       />
                     </div>

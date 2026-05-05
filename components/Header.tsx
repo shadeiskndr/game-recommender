@@ -39,12 +39,12 @@ function Header() {
             OpenAI
           </a>
           <a
-            href="https://www.datastax.com/"
+            href="https://www.convex.dev/"
             target="_blank"
             rel="noopener noreferrer"
             className="px-2 sm:px-3 py-1 bg-dark-800/50 rounded-full hover:bg-secondary-600/20 hover:text-secondary-300 transition-all duration-200 border border-dark-700 hover:border-secondary-500/50"
           >
-            DataStax
+            Convex
           </a>
           <a
             href="https://rawg.io/apidocs"

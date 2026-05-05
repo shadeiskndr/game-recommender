@@ -22,7 +22,7 @@ function GamePoster({
   };
 
   return (
-    <Link href={`/game/${game._id}`} className="group block">
+    <Link href={`/game/${game.slug}`} className="group block">
       <div className="relative">
         {/* Game Image */}
         <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-dark-800 to-dark-900 game-card-hover">
