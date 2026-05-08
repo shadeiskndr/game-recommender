@@ -7,29 +7,30 @@ const ImageWithFallback = (props: {
   src: string;
   alt: string;
   className: string;
-  width?: number;
-  height?: number;
+  imageClassName?: string;
+  sizes?: string;
+  loading?: "lazy" | "eager";
 }) => {
   const [imgSrc, setImgSrc] = useState(props.src);
   const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <div className="relative overflow-hidden">
+    <div className={`relative overflow-hidden ${props.className}`}>
       {isLoading && (
         <div className="absolute inset-0 bg-gradient-to-br from-dark-800 to-dark-900 animate-pulse rounded-lg"></div>
       )}
       <Image
-        width={props.width || 400}
-        height={props.height || 300}
-        {...props}
+        fill
         src={imgSrc}
         alt={props.alt}
+        sizes={props.sizes ?? "(max-width: 768px) 100vw, 50vw"}
+        loading={props.loading}
         onLoad={() => setIsLoading(false)}
         onError={() => {
           setImgSrc("/placeholder.jpeg");
           setIsLoading(false);
         }}
-        className={`${props.className} transition-opacity duration-300 ${
+        className={`${props.imageClassName ?? ""} transition-opacity duration-300 ${
           isLoading ? "opacity-0" : "opacity-100"
         }`}
       />

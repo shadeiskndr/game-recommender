@@ -16,7 +16,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scrollbar-gutter-stable">
+    <html
+      lang="en"
+      className="scrollbar-gutter-stable"
+      data-scroll-behavior="smooth"
+    >
       <body className="min-h-screen bg-linear-to-br from-dark-950 via-dark-900 to-secondary-900">
         <ConvexClientProvider>
           {/* Simple radial gradients for depth */}

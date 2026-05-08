@@ -72,9 +72,10 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
                 <ImageWithFallback
                   src={game.background_image}
                   alt={game.name}
-                  className="w-full h-80 sm:h-96 lg:h-[610px] object-cover lg:object-contain transition-transform duration-500 group-hover:scale-105"
-                  width={600}
-                  height={500}
+                  className="w-full h-80 sm:h-96 lg:h-[610px]"
+                  imageClassName="object-cover lg:object-contain transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 1280px) 100vw, 50vw"
+                  loading="eager"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-dark-900/60 via-transparent to-dark-900/20"></div>
               </div>

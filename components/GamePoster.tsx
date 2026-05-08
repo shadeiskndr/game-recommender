@@ -27,11 +27,11 @@ function GamePoster({
         {/* Game Image */}
         <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-dark-800 to-dark-900 game-card-hover">
           <ImageWithFallback
-            className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-64"
+            imageClassName="object-cover group-hover:scale-105 transition-transform duration-500"
             src={game.background_image}
             alt={game.name}
-            width={400}
-            height={256}
+            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
           />
 
           {/* Overlay Gradient */}
