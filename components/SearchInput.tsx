@@ -126,12 +126,12 @@ function SearchInput() {
   return (
     <div className="max-w-4xl mx-auto">
       <form action={searchAction} className="relative group">
-        <div className="relative glass-effect rounded-2xl p-2 search-glow transition-all duration-300 group-hover:bg-white/15">
+        <div className="relative bg-card border border-muted-foreground/50 rounded-2xl p-2 transition-all duration-300 focus-within:ring-2 focus-within:ring-ring">
           <div className="flex items-center space-x-4">
             {/* Home Button */}
-            <Link href="/" className="flex-shrink-0">
-              <div className="p-3 rounded-xl bg-primary-600/20 hover:bg-primary-600/30 transition-all duration-200 group/home">
-                <HomeIcon className="h-6 w-6 text-primary-300 group-hover/home:text-primary-200 group-hover/home:scale-110 transition-colors duration-200" />
+            <Link href="/" className="shrink-0">
+              <div className="p-3 rounded-xl bg-muted hover:bg-muted/80 transition-colors duration-200 group/home">
+                <HomeIcon className="h-6 w-6 text-foreground group-hover/home:scale-110 transition-transform duration-200" />
               </div>
             </Link>
 
@@ -142,7 +142,7 @@ function SearchInput() {
                 type="text"
                 name="searchTerm"
                 placeholder="Describe the game you want to search (any information, name, genre, character, etc.)"
-                className="w-full bg-transparent text-white placeholder-dark-400 text-lg py-4 px-3 focus:outline-none focus:placeholder-dark-500 transition-all duration-200"
+                className="w-full bg-transparent text-foreground placeholder:text-muted-foreground text-lg py-4 px-3 focus:outline-none"
                 autoComplete="off"
               />
             </div>
@@ -150,22 +150,22 @@ function SearchInput() {
             {/* Search Button */}
             <button
               type="submit"
-              className="flex-shrink-0 p-3 rounded-xl bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-500 hover:to-secondary-500 transition-all duration-200 group/search shadow-lg hover:shadow-xl cursor-pointer"
+              className="shrink-0 p-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-200 group/search shadow-sm cursor-pointer"
             >
-              <MagnifyingGlassIcon className="h-6 w-6 text-white group-hover/search:scale-110 transition-transform duration-200" />
+              <MagnifyingGlassIcon className="h-6 w-6 group-hover/search:scale-110 transition-transform duration-200" />
             </button>
           </div>
         </div>
 
         {/* Search Suggestions */}
         <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm">
-          <span className="text-gray-400 pt-1">Try:</span>
+          <span className="text-muted-foreground pt-1">Try:</span>
           {suggestions.map((suggestion) => (
             <button
               key={suggestion}
               type="button"
               onClick={() => handleSuggestionClick(suggestion)}
-              className="px-3 py-1 bg-dark-800/30 hover:bg-primary-600/20 text-gray-300 hover:text-primary-300 rounded-full transition-all duration-200 border border-dark-700/50 hover:border-primary-500/50 animate-fade-in cursor-pointer"
+              className="px-3 py-1 bg-card/30 hover:bg-primary/20 text-muted-foreground hover:text-primary rounded-full transition-all duration-200 border border-muted-foreground/50 hover:border-primary/50 animate-fade-in cursor-pointer"
             >
               {suggestion}
             </button>
@@ -173,7 +173,7 @@ function SearchInput() {
           <button
             type="button"
             onClick={refreshSuggestions}
-            className="px-3 py-1 bg-dark-800/30 hover:bg-secondary-600/20 text-gray-400 hover:text-secondary-300 rounded-full transition-all duration-200 border border-dark-700/50 hover:border-secondary-500/50 text-xs hover:rotate-180 transform cursor-pointer"
+            className="px-3 py-1 bg-card/30 hover:bg-primary/20 text-muted-foreground hover:text-primary rounded-full transition-all duration-200 border border-muted-foreground/50 hover:border-primary/50 text-xs hover:rotate-180 transform cursor-pointer"
             title="Get new suggestions"
           >
             🎲

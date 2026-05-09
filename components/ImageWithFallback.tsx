@@ -17,7 +17,7 @@ const ImageWithFallback = (props: {
   return (
     <div className={`relative overflow-hidden ${props.className}`}>
       {isLoading && (
-        <div className="absolute inset-0 bg-gradient-to-br from-dark-800 to-dark-900 animate-pulse rounded-lg"></div>
+        <div className="absolute inset-0 bg-muted animate-pulse rounded-lg"></div>
       )}
       <Image
         fill

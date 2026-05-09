@@ -68,16 +68,15 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Game Image */}
             <div className="relative">
-              <div className="relative overflow-hidden rounded-2xl shadow-2xl group">
+              <div className="relative overflow-hidden rounded-2xl shadow-sm border border-border group">
                 <ImageWithFallback
                   src={game.background_image}
                   alt={game.name}
-                  className="w-full h-80 sm:h-96 lg:h-[610px]"
+                  className="w-full h-80 sm:h-96 lg:h-152.5"
                   imageClassName="object-cover lg:object-contain transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 1280px) 100vw, 50vw"
                   loading="eager"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-900/60 via-transparent to-dark-900/20"></div>
               </div>
             </div>
 
@@ -86,7 +85,7 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
               {/* Title and Genre */}
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight">
                     {game.name}
                   </h1>
                 </div>
@@ -96,7 +95,7 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
                     {game.genres.split(", ").map((genre, index) => (
                       <span
                         key={index}
-                        className="px-3 py-1.5 bg-gradient-to-r from-primary-600/20 to-primary-500/20 text-primary-300 rounded-full text-sm border border-primary-500/30 hover:border-primary-400/50 transition-colors"
+                        className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-full text-sm border border-border"
                       >
                         {genre}
                       </span>
@@ -108,32 +107,32 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
               {/* Game Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Release Date */}
-                <div className="glass-effect rounded-xl p-4 space-y-3 hover:bg-dark-800/60 transition-colors">
+                <div className="bg-card border border-border rounded-xl p-4 space-y-3 hover:bg-card/60 transition-colors">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-primary-500/20 rounded-lg">
-                      <CalendarIcon className="h-5 w-5 text-primary-400" />
+                    <div className="p-2 bg-primary/20 rounded-lg">
+                      <CalendarIcon className="h-5 w-5 text-primary" />
                     </div>
-                    <span className="text-gray-300 text-sm font-medium">
+                    <span className="text-muted-foreground text-sm font-medium">
                       Release Date
                     </span>
                   </div>
-                  <p className="text-white font-semibold text-lg">
+                  <p className="text-foreground font-semibold text-lg">
                     {game.released || "Unknown"}
                   </p>
                 </div>
 
                 {/* User Rating */}
-                <div className="glass-effect rounded-xl p-4 space-y-3 hover:bg-dark-800/60 transition-colors">
+                <div className="bg-card border border-border rounded-xl p-4 space-y-3 hover:bg-card/60 transition-colors">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-secondary-500/20 rounded-lg">
-                      <StarIcon className="h-5 w-5 text-secondary-400" />
+                    <div className="p-2 bg-primary/20 rounded-lg">
+                      <StarIcon className="h-5 w-5 text-primary" />
                     </div>
-                    <span className="text-gray-300 text-sm font-medium">
+                    <span className="text-muted-foreground text-sm font-medium">
                       User Rating
                     </span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <p className="text-white font-semibold text-lg">
+                    <p className="text-foreground font-semibold text-lg">
                       {game.rating || "N/A"}
                     </p>
                     {game.rating && (
@@ -144,7 +143,7 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
                             className={`h-4 w-4 ${
                               i < Math.floor(parseFloat(game.rating))
                                 ? getStarColor(parseFloat(game.rating))
-                                : "text-gray-600"
+                                : "text-muted-foreground"
                             }`}
                           />
                         ))}
@@ -154,12 +153,12 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
                 </div>
 
                 {/* Metacritic Score */}
-                <div className="glass-effect rounded-xl p-4 space-y-3 hover:bg-dark-800/60 transition-colors">
+                <div className="bg-card border border-border rounded-xl p-4 space-y-3 hover:bg-card/60 transition-colors">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-secondary-500/20 rounded-lg">
-                      <ChartBarIcon className="h-5 w-5 text-secondary-400" />
+                    <div className="p-2 bg-primary/20 rounded-lg">
+                      <ChartBarIcon className="h-5 w-5 text-primary" />
                     </div>
-                    <span className="text-gray-300 text-sm font-medium">
+                    <span className="text-muted-foreground text-sm font-medium">
                       Critic Score
                     </span>
                   </div>
@@ -173,7 +172,7 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
                         {game.metacritic}
                       </span>
                     ) : (
-                      <span className="text-white font-semibold text-lg">
+                      <span className="text-foreground font-semibold text-lg">
                         N/A
                       </span>
                     )}
@@ -181,16 +180,16 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
                 </div>
 
                 {/* Playtime */}
-                <div className="glass-effect rounded-xl p-4 space-y-3 hover:bg-dark-800/60 transition-colors">
+                <div className="bg-card border border-border rounded-xl p-4 space-y-3 hover:bg-card/60 transition-colors">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-primary-500/20 rounded-lg">
-                      <ClockIcon className="h-5 w-5 text-primary-400" />
+                    <div className="p-2 bg-primary/20 rounded-lg">
+                      <ClockIcon className="h-5 w-5 text-primary" />
                     </div>
-                    <span className="text-gray-300 text-sm font-medium">
+                    <span className="text-muted-foreground text-sm font-medium">
                       Avg Playtime
                     </span>
                   </div>
-                  <p className="text-white font-semibold text-lg">
+                  <p className="text-foreground font-semibold text-lg">
                     {game.playtime ? `${game.playtime} hours` : "Unknown"}
                   </p>
                 </div>
@@ -198,12 +197,12 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
 
               {/* Platforms */}
               {game.platforms && (
-                <div className="glass-effect rounded-xl p-4 space-y-3 hover:bg-dark-800/60 transition-colors mt-[-0.5rem] lg:mt-[-0.8rem]">
+                <div className="bg-card border border-border rounded-xl p-4 space-y-3 hover:bg-card/60 transition-colors -mt-2 lg:mt-[-0.8rem]">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-secondary-500/20 rounded-lg">
-                      <DevicePhoneMobileIcon className="h-5 w-5 text-secondary-400" />
+                    <div className="p-2 bg-primary/20 rounded-lg">
+                      <DevicePhoneMobileIcon className="h-5 w-5 text-primary" />
                     </div>
-                    <span className="text-gray-300 font-semibold">
+                    <span className="text-muted-foreground text-sm font-medium">
                       Available Platforms
                     </span>
                   </div>
@@ -211,7 +210,7 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
                     {game.platforms.split(", ").map((platform, index) => (
                       <span
                         key={index}
-                        className="px-3 py-2 bg-secondary-600/20 text-secondary-300 rounded-lg text-sm border border-secondary-500/30 hover:bg-secondary-600/30 transition-colors"
+                        className="px-3 py-2 bg-primary/20 text-primary rounded-lg text-sm border border-primary/30 hover:bg-primary/30 transition-colors"
                       >
                         {platform}
                       </span>
@@ -224,15 +223,15 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
 
           {/* Game Description */}
           <div className="mt-4 lg:mt-6">
-            <div className="glass-effect rounded-2xl p-6 lg:p-8 hover:bg-dark-800/60 transition-colors">
+            <div className="bg-card border border-border rounded-2xl p-6 lg:p-8 hover:bg-card/60 transition-colors">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="p-2 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-lg">
-                  <BookOpenIcon className="h-6 w-6 text-primary-400" />
+                <div className="p-2 bg-primary/20 rounded-lg">
+                  <BookOpenIcon className="h-6 w-6 text-primary" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">
+                <h2 className="text-2xl font-bold text-foreground">
                   About This Game
                 </h2>
-                <div className="flex-1 h-px bg-gradient-to-r from-primary-500/50 via-secondary-500/50 to-transparent"></div>
+                <div className="flex-1 h-px bg-border"></div>
               </div>
               <GameDescription description={cleanDescription} />
             </div>
@@ -242,13 +241,13 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
           <div className="mt-4 space-y-4">
             {/* Tags Section */}
             {game.tags && (
-              <div className="glass-effect rounded-2xl p-6 lg:p-8 hover:bg-dark-800/60 transition-colors">
+              <div className="bg-card border border-border rounded-2xl p-6 lg:p-8 hover:bg-card/60 transition-colors">
                 <div className="flex items-center space-x-3 mb-6">
-                  <div className="p-2 bg-primary-500/20 rounded-lg">
-                    <TagIcon className="h-6 w-6 text-primary-400" />
+                  <div className="p-2 bg-primary/20 rounded-lg">
+                    <TagIcon className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold text-white">Game Tags</h3>
-                  <div className="flex-1 h-px bg-gradient-to-r from-primary-500/50 to-transparent"></div>
+                  <h3 className="text-xl font-bold text-foreground">Game Tags</h3>
+                  <div className="flex-1 h-px bg-border"></div>
                 </div>
                 <TagsSection tags={game.tags} />
               </div>
@@ -262,14 +261,9 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
         <div className="px-4 sm:px-6 lg:px-8 pb-12">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-6 mt-6">
-              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
                 Similar Games You Might Like
               </h2>
-              <div className="w-20 h-1 bg-gradient-to-r from-primary-500 to-secondary-500 mx-auto rounded-full mb-6"></div>
-              <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-                AI-powered recommendations based on game similarity using
-                advanced vector embeddings
-              </p>
             </div>
 
             {/* Horizontal Scrolling Container */}
@@ -279,13 +273,13 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
               <div className="absolute right-0 top-0 bottom-0 w-8  z-10 pointer-events-none"></div>
 
               {/* Scrollable Games Container */}
-              <div className="horizontal-scroll overflow-x-auto pb-4">
+              <div className="overflow-x-auto pb-4">
                 <div
                   className="flex space-x-6 px-4 py-4"
                   style={{ width: "max-content" }}
                 >
                   {similarGames.map((similarGame, index) => (
-                    <div key={similarGame._id} className="flex-shrink-0 w-80">
+                    <div key={similarGame._id} className="shrink-0 w-80">
                       <GamePoster
                         game={similarGame}
                         index={index + 1}
@@ -300,26 +294,10 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
 
               {/* Scroll Hint */}
               <div className="text-center mt-4">
-                <p className="text-gray-500 text-sm flex items-center justify-center space-x-2">
+                <p className="text-muted-foreground text-sm flex items-center justify-center space-x-2">
                   <span>←</span>
                   <span>Scroll horizontally to see more games</span>
                   <span>→</span>
-                </p>
-              </div>
-            </div>
-
-            {/* AI Explanation */}
-            <div className="mt-12 text-center">
-              <div className="glass-effect rounded-xl p-6 max-w-3xl mx-auto hover:bg-dark-800/60 transition-colors">
-                <h3 className="text-lg font-semibold text-white mb-3 flex items-center justify-center space-x-2">
-                  <span className="text-2xl">🤖</span>
-                  <span>How AI Recommendations Work</span>
-                </h3>
-                <p className="text-gray-300 text-sm leading-relaxed">
-                  Our AI analyzes game descriptions, genres, and gameplay
-                  elements using vector embeddings to find games with similar
-                  characteristics. The similarity percentage shows how closely
-                  each game matches the current one based on these factors.
                 </p>
               </div>
             </div>

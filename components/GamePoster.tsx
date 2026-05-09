@@ -23,9 +23,9 @@ function GamePoster({
 
   return (
     <Link href={`/game/${game.slug}`} className="group block">
-      <div className="relative">
+      <div className="relative transition-transform duration-300 hover:-translate-y-2">
         {/* Game Image */}
-        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-dark-800 to-dark-900 game-card-hover">
+        <div className="relative overflow-hidden rounded-xl bg-card border border-border">
           <ImageWithFallback
             className="w-full h-64"
             imageClassName="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -34,20 +34,17 @@ function GamePoster({
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
           />
 
-          {/* Overlay Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-dark-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
           {/* Similarity Rating Badge */}
           {similarityRating && (
             <div className="absolute top-3 right-3 group/tooltip">
-              <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full shadow-lg cursor-help">
-                <span className="text-white font-bold text-sm">
+              <div className="flex items-center justify-center w-12 h-12 bg-primary text-primary-foreground rounded-full shadow-lg cursor-help">
+                <span className="font-bold text-sm">
                   {similarityRating}%
                 </span>
               </div>
 
               {/* Tooltip */}
-              <div className="absolute top-full right-0 mt-2 px-3 py-2 bg-dark-800 text-white text-xs rounded-lg shadow-lg border border-dark-700 whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
+              <div className="absolute top-full right-0 mt-2 px-3 py-2 bg-card text-foreground text-xs rounded-lg shadow-lg border border-border whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
                 <div className="relative">Similarity Rating</div>
               </div>
             </div>
@@ -56,7 +53,7 @@ function GamePoster({
           {/* Large Index for Search Results */}
           {index && !similarityRating && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <span className="text-8xl font-black text-white/10 group-hover:text-white/20 transition-colors duration-300">
+              <span className="text-8xl font-black text-foreground/10 group-hover:text-foreground/20 transition-colors duration-300">
                 {index}
               </span>
             </div>
@@ -65,12 +62,12 @@ function GamePoster({
 
         {/* Game Info Card */}
         <div className="mt-4 space-y-2">
-          <h3 className="text-lg font-semibold text-white group-hover:text-primary-300 transition-colors duration-200 line-clamp-2">
+          <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors duration-200 line-clamp-2">
             {game.name}
           </h3>
           <div className="flex items-center space-x-2">
             <div className="flex-1">
-              <p className="text-gray-400 text-sm line-clamp-1">
+              <p className="text-muted-foreground text-sm line-clamp-1">
                 {game.genres}
               </p>
             </div>
@@ -80,7 +77,7 @@ function GamePoster({
                 <StarIcon
                   className={`w-3 h-3 ${getStarColor(parseFloat(game.rating))}`}
                 />
-                <span className="text-gray-400">{game.rating}/5</span>
+                <span className="text-muted-foreground">{game.rating}/5</span>
               </div>
             )}
           </div>

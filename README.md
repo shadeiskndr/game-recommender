@@ -1,5 +1,5 @@
 <h1 align="center">
-  🎮 AI Game Recommender
+  🎮 Game Recommender
 </h1>
 
 <p align="center">
