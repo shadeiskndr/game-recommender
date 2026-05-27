@@ -1,12 +1,21 @@
 import GamePoster from "@/components/GamePoster";
+import SearchFilters from "@/components/SearchFilters";
 import { fetchAction } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
 import {
   MagnifyingGlassIcon,
   ArrowPathIcon,
+  ExclamationTriangleIcon,
+  PlusIcon,
 } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import {
+  parseSearchParams,
+  buildSearchHref,
+  DEFAULT_LIMIT,
+} from "@/lib/searchParams";
 
-export const revalidate = 86400;
+export const dynamic = "force-dynamic";
 
 type SearchTermProps = {
   params: Promise<{
@@ -19,15 +28,26 @@ type SearchTermProps = {
 
 async function SearchTerm({
   params: paramsPromise,
+  searchParams: searchParamsPromise,
 }: SearchTermProps) {
-  const params = await paramsPromise;
-  const { term } = params;
+  const { term } = await paramsPromise;
+  const rawParams = (await searchParamsPromise) ?? {};
   const decodedTerm = decodeURIComponent(term);
+  const filters = parseSearchParams(rawParams);
 
-  const similarGames = await fetchAction(api.search.searchByText, {
-    query: decodedTerm,
-    limit: 12,
-  });
+  const { results, hasMore, poolExhausted } = await fetchAction(
+    api.search.searchByText,
+    {
+      query: decodedTerm,
+      genres: filters.genres.length ? filters.genres : undefined,
+      platforms: filters.platforms.length ? filters.platforms : undefined,
+      minRating: filters.minRating,
+      yearFrom: filters.yearFrom,
+      yearTo: filters.yearTo,
+      sort: filters.sort,
+      limit: filters.limit,
+    },
+  );
 
   return (
     <div className="min-h-screen">
@@ -55,36 +75,72 @@ async function SearchTerm({
                 </span>
               </div>
               <p className="text-sm text-muted-foreground mt-4">
-                Found {similarGames.length} games using vector similarity search
+                Showing {results.length} game{results.length === 1 ? "" : "s"}{" "}
+                using vector similarity search
               </p>
             </div>
           </div>
 
+          {/* Filters */}
+          <SearchFilters filters={filters} />
+
           {/* Results Grid */}
-          {similarGames.length > 0 ? (
+          {results.length > 0 ? (
             <>
               {/* Results Counter and Sort Info */}
               <div className="flex justify-between items-center mb-8 px-4">
                 <div className="text-muted-foreground">
                   <span className="text-foreground font-semibold">
-                    {similarGames.length}
+                    {results.length}
                   </span>{" "}
-                  games found
+                  game{results.length === 1 ? "" : "s"} shown
                 </div>
                 <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                   <ArrowPathIcon className="h-4 w-4" />
-                  <span>Sorted by AI relevance</span>
+                  <span>
+                    Sorted by{" "}
+                    {filters.sort === "relevance"
+                      ? "AI relevance"
+                      : filters.sort}
+                  </span>
                 </div>
               </div>
 
               {/* Responsive Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {similarGames.map((game, index) => (
+                {results.map((game, index) => (
                   <div key={game._id} className="relative group">
                     <GamePoster game={game} index={index + 1} />
                   </div>
                 ))}
               </div>
+
+              {/* Load More */}
+              {hasMore && (
+                <div className="flex justify-center mt-12">
+                  <Link
+                    href={buildSearchHref(decodedTerm, filters, {
+                      limit: filters.limit + DEFAULT_LIMIT,
+                    })}
+                    scroll={false}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition-colors"
+                  >
+                    <PlusIcon className="h-5 w-5" />
+                    Load more games
+                  </Link>
+                </div>
+              )}
+
+              {/* Pool Exhausted Hint */}
+              {!hasMore && poolExhausted && (
+                <div className="flex items-center justify-center gap-2 mt-12 text-sm text-muted-foreground">
+                  <ExclamationTriangleIcon className="h-4 w-4" />
+                  <span>
+                    Results may be limited — refine your search or filters to
+                    surface more matches.
+                  </span>
+                </div>
+              )}
             </>
           ) : (
             /* No Results State */
@@ -95,8 +151,8 @@ async function SearchTerm({
                   No games found
                 </h3>
                 <p className="text-muted-foreground mb-8">
-                  Try adjusting your search terms or browse our featured games
-                  instead.
+                  Try adjusting your filters or search terms, or browse our
+                  featured games instead.
                 </p>
                 <div className="space-y-4">
                   <a

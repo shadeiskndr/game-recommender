@@ -52,6 +52,46 @@ export const _getEmbeddingForGame = internalQuery({
   },
 });
 
+type FacetFilters = {
+  genres?: string[];
+  platforms?: string[];
+  minRating?: number;
+  yearFrom?: number;
+  yearTo?: number;
+};
+
+// genres/platforms are stored as comma-joined strings ("Action, Adventure").
+function tokenize(value: string): string[] {
+  return value
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
+}
+
+// Facet semantics: OR within a facet (any selected genre matches), AND across
+// facets (genre AND platform AND rating AND year must all pass).
+function matchesFilters(game: Doc<"games">, f: FacetFilters): boolean {
+  if (f.genres?.length) {
+    const owned = tokenize(game.genres);
+    if (!f.genres.some((g) => owned.includes(g))) return false;
+  }
+  if (f.platforms?.length) {
+    const owned = tokenize(game.platforms);
+    if (!f.platforms.some((p) => owned.includes(p))) return false;
+  }
+  if (f.minRating != null) {
+    const rating = parseFloat(game.rating);
+    if (!Number.isFinite(rating) || rating < f.minRating) return false;
+  }
+  if (f.yearFrom != null || f.yearTo != null) {
+    const y = parseInt(game.released.slice(0, 4), 10);
+    if (!Number.isFinite(y)) return false;
+    if (f.yearFrom != null && y < f.yearFrom) return false;
+    if (f.yearTo != null && y > f.yearTo) return false;
+  }
+  return true;
+}
+
 export const _hydrateByEmbeddingIds = internalQuery({
   args: {
     results: v.array(
@@ -61,8 +101,23 @@ export const _hydrateByEmbeddingIds = internalQuery({
       }),
     ),
     excludeGameId: v.optional(v.id("games")),
+    genres: v.optional(v.array(v.string())),
+    platforms: v.optional(v.array(v.string())),
+    minRating: v.optional(v.number()),
+    yearFrom: v.optional(v.number()),
+    yearTo: v.optional(v.number()),
   },
-  handler: async (ctx, { results, excludeGameId }) => {
+  handler: async (
+    ctx,
+    { results, excludeGameId, genres, platforms, minRating, yearFrom, yearTo },
+  ) => {
+    const filters: FacetFilters = {
+      genres,
+      platforms,
+      minRating,
+      yearFrom,
+      yearTo,
+    };
     const out: Array<Doc<"games"> & { _score: number }> = [];
     for (const r of results) {
       const game = await ctx.db
@@ -71,6 +126,7 @@ export const _hydrateByEmbeddingIds = internalQuery({
         .unique();
       if (!game) continue;
       if (excludeGameId && game._id === excludeGameId) continue;
+      if (!matchesFilters(game, filters)) continue;
       out.push({ ...game, _score: r.score });
     }
     return out;

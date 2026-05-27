@@ -33,4 +33,12 @@ export default defineSchema({
     dimensions: 3072,
     filterFields: ["genres", "platforms"],
   }),
+
+  // Caches OpenAI embeddings for search queries so repeated facet/sort/load-more
+  // interactions on the same term don't re-hit the embeddings API. Keyed by the
+  // normalized (trimmed + lowercased) query text.
+  queryEmbeddings: defineTable({
+    query: v.string(),
+    vector: v.array(v.float64()),
+  }).index("by_query", ["query"]),
 });

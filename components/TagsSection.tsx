@@ -1,11 +1,23 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   Collapsible,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
+
+function TagChip({ tag }: { tag: string }) {
+  return (
+    <Link
+      href={`/search/${encodeURIComponent(tag)}`}
+      className="px-3 py-1.5 bg-primary/15 text-primary rounded-lg text-sm border border-primary/25 hover:bg-primary/25 hover:border-primary/50 transition-colors"
+    >
+      {tag}
+    </Link>
+  );
+}
 
 export function TagsSection({ tags }: { tags: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,12 +29,7 @@ export function TagsSection({ tags }: { tags: string }) {
     return (
       <div className="flex flex-wrap gap-2">
         {tagArray.map((tag, index) => (
-          <span
-            key={index}
-            className="px-3 py-1.5 bg-primary/15 text-primary rounded-lg text-sm border border-primary/25 hover:bg-primary/25 transition-colors"
-          >
-            {tag}
-          </span>
+          <TagChip key={index} tag={tag} />
         ))}
       </div>
     );
@@ -33,23 +40,13 @@ export function TagsSection({ tags }: { tags: string }) {
       <div className="space-y-4">
         <div className="flex flex-wrap gap-2">
           {visibleTags.map((tag, index) => (
-            <span
-              key={index}
-              className="px-3 py-1.5 bg-primary/15 text-primary rounded-lg text-sm border border-primary/25 hover:bg-primary/25 transition-colors"
-            >
-              {tag}
-            </span>
+            <TagChip key={index} tag={tag} />
           ))}
 
           {/* Show hidden tags inline when expanded */}
           {isOpen &&
             hiddenTags.map((tag, index) => (
-              <span
-                key={index + 8}
-                className="px-3 py-1.5 bg-primary/15 text-primary rounded-lg text-sm border border-primary/25 hover:bg-primary/25 transition-colors"
-              >
-                {tag}
-              </span>
+              <TagChip key={index + 8} tag={tag} />
             ))}
         </div>
 

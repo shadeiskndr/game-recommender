@@ -15,6 +15,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 export const revalidate = 86400;
 
@@ -93,12 +94,13 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
                 {game.genres && (
                   <div className="flex flex-wrap gap-2">
                     {game.genres.split(", ").map((genre, index) => (
-                      <span
+                      <Link
                         key={index}
-                        className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-full text-sm border border-border"
+                        href={`/search/${encodeURIComponent(genre)}?genres=${encodeURIComponent(genre)}`}
+                        className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-full text-sm border border-border hover:bg-secondary/70 hover:border-primary/50 transition-colors"
                       >
                         {genre}
-                      </span>
+                      </Link>
                     ))}
                   </div>
                 )}
@@ -208,12 +210,13 @@ async function GamePage({ params: paramsPromise }: GamePageProps) {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {game.platforms.split(", ").map((platform, index) => (
-                      <span
+                      <Link
                         key={index}
+                        href={`/search/${encodeURIComponent(platform)}?platforms=${encodeURIComponent(platform)}`}
                         className="px-3 py-2 bg-primary/20 text-primary rounded-lg text-sm border border-primary/30 hover:bg-primary/30 transition-colors"
                       >
                         {platform}
-                      </span>
+                      </Link>
                     ))}
                   </div>
                 </div>
